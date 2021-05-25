@@ -35,6 +35,7 @@ def parse_args():
     return parser.parse_args()
 
 def get_accuracy(model, loader, specific_class=None) -> float:
+    model.eval()
     correct = 0
     total = 0
     with torch.no_grad():
@@ -51,6 +52,7 @@ def get_accuracy(model, loader, specific_class=None) -> float:
                         total += 1
                         if label == predict:
                             correct += 1
+    model.train()
     return correct / total
 
 
@@ -111,7 +113,7 @@ def train_backdoor(dataset, epochs, args):
     print('Training Started...')
     best_test_acc = 0.0
     loss = 0.0
-    for epoch in range(epochs): 
+    for epoch in range(epochs):
         running_accuracy = []
         running_loss = 0.0
         for i, data in enumerate(train_loader, 0):
